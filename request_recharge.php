@@ -70,7 +70,7 @@ if (@$_GET["status"] == 1) {
                                                     <div class="col-md-8">
                                                         <div class="form-group has-icon-left">
                                                             <div class="position-relative">
-                                                                <input type="number" class="form-control" name="amount" placeholder="Amount" id="first-name-icon">
+                                                                <input type="number" min="20" class="form-control" name="amount" placeholder="Amount" id="first-name-icon">
                                                                 <div class="form-control-icon">
                                                                     <i class="bi bi-currency-rupee"></i>
                                                                 </div>

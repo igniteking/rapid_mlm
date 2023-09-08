@@ -56,20 +56,36 @@
                                             </a>
                                             <ul class="active">
                                                 <?php
-                                                    $get_member_left = mysqli_query($conn, "SELECT * FROM `mlm_tree` WHERE parent_id = '$user_id'");
-                                                    while ($rows = mysqli_fetch_assoc($get_member_left)) {
-                                                        $child_id = $rows['child_id'];
-                                                        $get_member_left_details = mysqli_query($conn, "SELECT * FROM `user_data` WHERE id = '$child_id'");
-                                                        while ($rows = mysqli_fetch_assoc($get_member_left_details)) {
-                                                            $left_user_name = $rows['user_name'];
-                                                            echo '
-                                                            <li>
-                                                            <a href="javascript:void(0);">
+                                                getLeftUsers(3, $conn, 1, 'left');
+                                                ?>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <?php
+                            function getLeftUsers($count, $conn, $child_id, $location)
+                            {
+                                // Base case: If count reaches 0, stop the recursion
+                                if ($count <= 0) {
+                                    return;
+                                }
+
+                                $get_member = mysqli_query($conn, "SELECT * FROM `mlm_tree` WHERE parent_id = '$child_id' AND child_location = '$location'");
+                                while ($rows = mysqli_fetch_assoc($get_member)) {
+                                    $child_id = $rows['child_id'];
+                                    $get_member_left_details = mysqli_query($conn, "SELECT * FROM `user_data` WHERE id = '$child_id'");
+                                    while ($rows = mysqli_fetch_assoc($get_member_left_details)) {
+                                        $child_name = $rows['user_name'];
+                                        $child_id = $rows['id'];
+                                        echo '
+                                                <li>
+                                                        <a href="javascript:void(0);">
                                                             <div class="member-view-box">
                                                                 <div class="member-image">
                                                                     <img src="./assets/images/faces/1.jpg" alt="Member">
                                                                     <div class="member-details">
-                                                                        <p>'. $left_user_name.'</p>
+                                                                        <p>' . $child_name . '</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -116,15 +132,13 @@
                                                         </ul>
                                                     </li>
                                                             ';
-                                                        }
-                                                    }
-                                                    ?>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                        getLeftUsers($count - 1, $conn, $child_id, $location);
+                                    }
+                                }
+                                // Recursive call with decreased count
+                            }
 
+                            ?>
                             <!-- // Basic multiple Column Form section end -->
                         </div>
                     </div>
